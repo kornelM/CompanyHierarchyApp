@@ -263,10 +263,6 @@ public class CompanyServiceTest {
 
 
 
-
-
-
-
     private List<Department> initHierarchy() {
         List<Department> departments = new ArrayList<>();
         departments.add(new Department("Marketing", Collections.singletonList(new Location("Krakow",
@@ -277,7 +273,6 @@ public class CompanyServiceTest {
 
         departments.add(new Department("HR", Collections.singletonList(
                 new Location("Krakow", Arrays.asList(new Team(6, "Team6"), new Team(7, "Team7"))))));
-
 
         return departments;
     }
