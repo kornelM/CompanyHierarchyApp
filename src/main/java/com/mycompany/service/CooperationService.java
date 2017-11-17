@@ -12,21 +12,19 @@ import java.util.stream.Collectors;
 @Component
 public class CooperationService implements ICooperationService {
     private Map<String, List<Team>> teamCo;
-    private Logger logger = Logger.getLogger(CooperationService.class);
+    private final Logger logger = Logger.getLogger(CooperationService.class);
 
     public CooperationService() {
         this.teamCo = new HashMap<>();
     }
 
     public void clearData() {
-        logger.info("Method: clearData");
         this.teamCo.clear();
     }
 
 
     @Override
     public boolean removeConnection(String teamName, List<Team> teams) {
-        logger.info("Method: removeConnection");
         int sizeBefore = teamCo.size();
         int sizeAfter;
 
@@ -50,7 +48,6 @@ public class CooperationService implements ICooperationService {
 
     @Override
     public Map<String, List<Team>> setCoworkers(int idParent, Integer[] coworkersIds, List<Team> teams) {
-        logger.info("Method: setCoworkers");
         List<Integer> availableTeamIds;
         if (checkListIfIdPresent(teams, idParent)) {
             availableTeamIds = removeIncorrectIds(coworkersIds, teams);
@@ -63,7 +60,6 @@ public class CooperationService implements ICooperationService {
 
 
     private Map<String, List<Team>> setConnections(List<Integer> availableTeamIds, List<Team> teamList) {
-        logger.info("Method: setConnections");
         for (Integer i : availableTeamIds) {
             List<Team> tmpList = new ArrayList<>();
             for (Integer j : availableTeamIds) {
@@ -82,7 +78,6 @@ public class CooperationService implements ICooperationService {
 
     @Override
     public List<Team> checkTeamList(List<Team> teamsToAdd, List<Team> existingList) {
-        logger.info("Method: checkTeamList");
         List<Team> returnList = new ArrayList<>();
 
         if (existingList != null) {
@@ -97,14 +92,12 @@ public class CooperationService implements ICooperationService {
 
     @Override
     public boolean checkListIfIdPresent(List<Team> teamList, int id) {
-        logger.info("Method: checkListIfIdPresent");
         return teamList.stream().anyMatch(team -> id == team.getId());
     }
 
 
     @Override
     public List<Integer> removeIncorrectIds(Integer[] intTable, List<Team> teamList) {
-        logger.info("Method: removeIncorrectIds");
         List<Integer> teamIds = teamList.stream()
                 .map(Team::getId)
                 .collect(Collectors.toList());
@@ -117,7 +110,6 @@ public class CooperationService implements ICooperationService {
 
     @Override
     public Team getTeamFromList(int teamId, List<Team> teamList) {
-        logger.info("Method: getTeamFromList");
         return teamList.stream()
                 .filter(team -> team.getId() == teamId)
                 .findAny()
@@ -127,7 +119,6 @@ public class CooperationService implements ICooperationService {
 
     @Override
     public Team getTeamByName(String teamName, List<Team> teamList) {
-        logger.info("Method: getTeamByName");
         return teamList.stream()
                 .filter(team -> team.getName().equals(teamName))
                 .findAny()
@@ -136,7 +127,6 @@ public class CooperationService implements ICooperationService {
 
 
     public Map<String, List<Team>> getTeamCo() {
-        logger.info("Method: getTeamCo");
         return teamCo;
     }
 }

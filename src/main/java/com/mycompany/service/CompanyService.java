@@ -19,12 +19,11 @@ import java.util.stream.Collectors;
 @Component
 public class CompanyService implements ICompanyService {
     private List<Department> departments;
-    private Logger logger = Logger.getLogger(CompanyService.class);
+    private final Logger logger = Logger.getLogger(CompanyService.class);
 
 
     @Override
     public ResponseEntity buildCompanyHierarchy(List<Department> departmentList) {
-        logger.info("Method: buildCompanyHierarchy");
         if (departments == null) {
             departments = departmentList;
             logger.info("Tree created!");
@@ -37,7 +36,6 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public Map<String, TeamInfoResponse> getAllTeamCoworkersInfo(List<Team> teamsCo) {
-        logger.info("Method: getAllTeamCoworkersInfo");
         if (teamsCo != null) {
             return teamsCo.stream()
                     .collect(Collectors.toMap(Team::getName, t -> getTeamInfo(t.getName())));
@@ -48,7 +46,6 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public TeamInfoResponse getTeamInfo(String teamName) {
-        logger.info("Method: getTeamInfo");
         for (Department d : departments) {
             for (Location l : d.getLocations()) {
                 for (Team t : l.getTeams()) {
@@ -66,7 +63,6 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public List<Team> getAllTeams() {
-        logger.info("Method getAllTeams");
         List<Team> teamsToReturn = new ArrayList<>();
 
         for (Department d : departments) {
@@ -79,7 +75,6 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public ResponseEntity deleteCompanyHierarchy() {
-        logger.info("Method deleteCompanyHierarchy");
         if (departments != null) {
             departments = null;
             logger.info("Tree removed.");
@@ -92,7 +87,6 @@ public class CompanyService implements ICompanyService {
 
     @Override
     public List<Department> addDepartment(String name) {
-logger.info("Method addDepartment");
         if (departments.add(new Department(name, new ArrayList<>()))) {
             return departments;
         } else {
@@ -103,7 +97,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<Location> addLocation(String departmentName, String locationName) {
-        logger.info("Method addLocation");
         for (Department d : departments) {
             if (d.getName().equals(departmentName)) {
                 if (d.getLocations().add(new Location(locationName, new ArrayList<>()))) {
@@ -118,7 +111,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<Team> addTeam(String departmentName, String locationName, String teamName) {
-        logger.info("Method addTeam");
         for (Department d : departments) {
             for (Location l : d.getLocations()) {
                 boolean exists = l.getTeams().stream()
@@ -138,7 +130,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<String> getDepartments() {
-        logger.info("Method getDepartments");
         if(departments != null){
             return departments.stream()
                     .map(Department::getName)
@@ -150,7 +141,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<String> getLocations() {
-        logger.info("Method getLocations");
         List<String> locationNames = new ArrayList<>();
         for (Department d : departments) {
             locationNames.addAll(d.getLocations().stream()
@@ -163,7 +153,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<Department> deleteDepartment(String name) {
-        logger.info("Method deleteDepartment");
         if (departments != null && departments.size() > 0) {
             for (int i = 0; i < departments.size(); i++) {
                 if (departments.get(i).getName().equals(name)) {
@@ -173,14 +162,13 @@ logger.info("Method addDepartment");
                 }
             }
         }
-        logger.info("Department: " + name + " not removed!");
+        logger.error("Department: " + name + " not removed!");
         return null;
     }
 
 
     @Override
     public List<Location> deleteLocation(String departmentName, String locationName) {
-        logger.info("Method deleteLocation");
         if (!departments.isEmpty()) {
             for (Department department : departments) {
                 if (department.getName().equals(departmentName)) {
@@ -194,7 +182,6 @@ logger.info("Method addDepartment");
                             logger.error("Location: " + locationName + " not found!");
                         }
                     }
-                    logger.error("Location list is empty!");
                 }
                 logger.error("Department: " + departmentName + " not found!");
             }
@@ -205,7 +192,6 @@ logger.info("Method addDepartment");
 
     @Override
     public List<Team> deleteTeam(String departmentName, String locationName, String teamName) {
-        logger.info("Method deleteTeam");
         if (!departments.isEmpty()) {
             for (Department department : departments) {
                 if (department.getName().equals(departmentName)) {
@@ -223,11 +209,9 @@ logger.info("Method addDepartment");
                                         logger.error("Team: " + teamName + " not found!");
                                     }
                                 }
-                            logger.error("Team list is empty!");
                         }
                         logger.error("Location:" + locationName + " not found!");
                     }
-                    logger.error("Location list is empty!");
                 }
                 logger.error("Department: " + departmentName + " not found!");
             }
