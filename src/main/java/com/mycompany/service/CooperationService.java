@@ -2,8 +2,7 @@ package com.mycompany.service;
 
 import com.mycompany.container.pojos.Team;
 import com.mycompany.service.interfaces.ICooperationService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -13,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class CooperationService implements ICooperationService {
     private Map<String, List<Team>> teamCo;
-    private Logger logger = LoggerFactory.getLogger(CooperationService.class);
+    private Logger logger = Logger.getLogger(CooperationService.class);
 
     public CooperationService() {
         this.teamCo = new HashMap<>();

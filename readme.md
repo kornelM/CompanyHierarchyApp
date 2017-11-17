@@ -9,7 +9,7 @@ You can add a connection between teams to set coworkers and manage them.
  - Java 8
  - SpringBoot 2.0
  - JUnit
- - Maven, slf4j
+ - Maven, log4j
 
 ### Build app 
 ```
@@ -268,7 +268,6 @@ Teams can be identified by its name or id. It could be changed to identify team 
 - migrate Spring configuration to .xml file (for now annotations are fine and don't create chaos)
 - refactor methods to increase Java 8 usage (i.e. Optionals?)
 - more unit, integration tests
-- logging to file
 - mapping endpoints
 
 ###### Note

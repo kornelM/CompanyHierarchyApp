@@ -5,8 +5,7 @@ import com.mycompany.container.pojos.Location;
 import com.mycompany.container.pojos.Team;
 import com.mycompany.container.pojos.TeamInfoResponse;
 import com.mycompany.service.interfaces.ICompanyService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ import java.util.stream.Collectors;
 @Component
 public class CompanyService implements ICompanyService {
     private List<Department> departments;
-    private Logger logger = LoggerFactory.getLogger(CompanyService.class);
+    private Logger logger = Logger.getLogger(CompanyService.class);
 
 
     @Override
