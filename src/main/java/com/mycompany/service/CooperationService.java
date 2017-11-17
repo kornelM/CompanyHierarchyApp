@@ -83,8 +83,9 @@ public class CooperationService implements ICooperationService {
         if (existingList != null) {
             teamsToAdd.removeIf(existingList::contains);
             returnList.addAll(existingList);
+        }else {
+            logger.error("List of coworkers empty!");
         }
-        logger.error("List of coworkers empty!");
         returnList.addAll(teamsToAdd);
         return returnList;
     }
