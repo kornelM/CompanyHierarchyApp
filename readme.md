@@ -55,7 +55,7 @@ creating and deleting teams, locations, departments and connections between team
 
 
 #### Some examples of requests:
-#####- creating a tree structure
+##### creating a tree structure
 ```
 		[
           {
@@ -183,7 +183,7 @@ creating and deleting teams, locations, departments and connections between team
 ```
 
 
-#####- creating connection between teams
+##### creating connection between teams
 
 ```
 {
@@ -193,7 +193,7 @@ creating and deleting teams, locations, departments and connections between team
 ```
 
 
-######... returns connections between all given teams (see below):
+###### returns connections between all given teams (see below):
 ```
 {
     "teamHR11": [
@@ -230,7 +230,7 @@ creating and deleting teams, locations, departments and connections between team
 
 ```
 
-#####- removing a team from hierarchy (team will be also removed from any connections)
+##### removing a team from hierarchy (team will be also removed from any connections)
 
 ```
 {
@@ -239,7 +239,7 @@ creating and deleting teams, locations, departments and connections between team
     "team": "teamITK6" 
 }
 ```
-######... returns list of teams in a given location:
+###### returns list of teams in a given location:
 ```
 [
     {
