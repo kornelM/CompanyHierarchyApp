@@ -1,12 +1,7 @@
-package com.mycompany.container.pojos;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.mycompany.hierarchyObjects;
 
 public class Team {
     private static int idNumber;
-    private static List<Integer> availableIds = new ArrayList<>();
-
 
     private int id;
     private String name;
@@ -29,14 +24,12 @@ public class Team {
     }
 
     private void setAvailableIds() {
-        availableIds.add(idNumber);
         idNumber++;
     }
 
 
     public static void clearData() {
         idNumber = 0;
-        availableIds.clear();
     }
 
 

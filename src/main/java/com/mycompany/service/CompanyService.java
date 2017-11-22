@@ -1,9 +1,9 @@
 package com.mycompany.service;
 
-import com.mycompany.container.pojos.Department;
-import com.mycompany.container.pojos.Location;
-import com.mycompany.container.pojos.Team;
-import com.mycompany.container.pojos.TeamInfoResponse;
+import com.mycompany.hierarchyObjects.Department;
+import com.mycompany.hierarchyObjects.Location;
+import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.controllers.pojo.TeamDetails;
 import com.mycompany.service.interfaces.ICompanyService;
 import org.apache.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -35,7 +35,7 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public Map<String, TeamInfoResponse> getAllTeamCoworkersInfo(List<Team> teamsCo) {
+    public Map<String, TeamDetails> getAllTeamCoworkersInfo(List<Team> teamsCo) {
         if (teamsCo != null) {
             return teamsCo.stream()
                     .collect(Collectors.toMap(Team::getName, t -> getTeamInfo(t.getName())));
@@ -45,12 +45,12 @@ public class CompanyService implements ICompanyService {
     }
 
     @Override
-    public TeamInfoResponse getTeamInfo(String teamName) {
+    public TeamDetails getTeamInfo(String teamName) {
         for (Department d : departments) {
             for (Location l : d.getLocations()) {
                 for (Team t : l.getTeams()) {
                     if (t.getName().equals(teamName)) {
-                        return new TeamInfoResponse(d.getName(), l.getName());
+                        return new TeamDetails(d.getName(), l.getName());
                     }
                 }
             }

@@ -1,12 +1,12 @@
 package com.mycompany.controllers;
 
 
-import com.mycompany.container.pojos.Department;
-import com.mycompany.container.pojos.Location;
-import com.mycompany.container.pojos.Team;
-import com.mycompany.container.pojos.TeamInfoResponse;
-import com.mycompany.controllers.request_objects.CooperationRequest;
-import com.mycompany.controllers.request_objects.MyRequestObj;
+import com.mycompany.hierarchyObjects.Department;
+import com.mycompany.hierarchyObjects.Location;
+import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.controllers.pojo.TeamDetails;
+import com.mycompany.controllers.pojo.Cooperators;
+import com.mycompany.controllers.pojo.HierarchyDetails;
 import com.mycompany.service.CompanyService;
 import com.mycompany.service.CooperationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +19,19 @@ import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/company/hierarchy")
-public class MyController {
+public class HierarchyController {
 
     private CooperationService cooperationService;
     private CompanyService companyService;
 
     @Autowired
-    public MyController(CooperationService cooperationService, CompanyService companyService) {
+    public HierarchyController(CooperationService cooperationService, CompanyService companyService) {
         this.cooperationService = cooperationService;
         this.companyService = companyService;
     }
 
 
-    //CREATE TREE
+
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity createTree(@RequestBody List<Department> departments) {
         if (departments.isEmpty()) {
@@ -40,7 +40,7 @@ public class MyController {
         return companyService.buildCompanyHierarchy(departments);
     }
 
-    // DELETE TREE
+
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public ResponseEntity deleteHierarchy() {
         companyService.deleteCompanyHierarchy();
@@ -50,9 +50,9 @@ public class MyController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    //ADD COWORKERS
+
     @RequestMapping(value = "/coworker/add", method = RequestMethod.POST)
-    public ResponseEntity<Map<String, List<Team>>> setCooperation(@RequestBody CooperationRequest request) {
+    public ResponseEntity<Map<String, List<Team>>> setCooperation(@RequestBody Cooperators request) {
 
         Map<String, List<Team>> teamListMap = cooperationService.setCoworkers(request.getParentId(), request.getCoworkersIds(), companyService.getAllTeams());
         if (teamListMap != null) {
@@ -62,7 +62,7 @@ public class MyController {
         }
     }
 
-    //REMOVE COWORKER
+
     @RequestMapping(value = "/coworker/remove/{name}", method = RequestMethod.DELETE)
     public ResponseEntity<List<Department>> removeCoworker(@PathVariable("name") String teamName) {
         boolean removed = cooperationService.removeConnection(teamName, companyService.getAllTeams());
@@ -74,7 +74,7 @@ public class MyController {
         }
     }
 
-    //GET ALL COWORKERS
+
     @RequestMapping(value = "/coworker/get/all", method = RequestMethod.GET)
     public ResponseEntity<Map<String, List<Team>>> getAllCoworkers() {
         Map<String, List<Team>> teamCo = cooperationService.getTeamCo();
@@ -86,10 +86,10 @@ public class MyController {
         }
     }
 
-    //RETURN INFO ABOUT ALL TEAM'S COWORKERS
+
     @RequestMapping(value = "/team/get/coworker/{name}", method = RequestMethod.GET)
     public ResponseEntity getTeamCoworkers(@PathVariable("name") String teamName) {
-        Map<String, TeamInfoResponse> allTeamCoworkersInfo;
+        Map<String, TeamDetails> allTeamCoworkersInfo;
 
         Map<String, List<Team>> teamCoworkers = cooperationService.getTeamCo();
         if (teamCoworkers != null) {
@@ -101,10 +101,10 @@ public class MyController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //GET INFORMATION ABOUT TEAM USING ITS NAME
+
     @RequestMapping(value = "get/info/team/{name}", method = RequestMethod.GET)
-    public ResponseEntity<TeamInfoResponse> getTeamInfo(@PathVariable("name") String teamName) {
-        TeamInfoResponse teamInfo = companyService.getTeamInfo(teamName);
+    public ResponseEntity<TeamDetails> getTeamInfo(@PathVariable("name") String teamName) {
+        TeamDetails teamInfo = companyService.getTeamInfo(teamName);
 
         if (teamInfo != null) {
             return new ResponseEntity<>(teamInfo, HttpStatus.OK);
@@ -113,7 +113,7 @@ public class MyController {
         }
     }
 
-    //RETURN ALL TEAMS IN COMPANY
+
     @RequestMapping(value = "/team/get/all", method = RequestMethod.GET)
     public ResponseEntity<List<Team>> getAllTeam() {
         List<Team> teamList = companyService.getAllTeams();
@@ -124,10 +124,10 @@ public class MyController {
         }
     }
 
-    //ADD TEAM BY GIVING ITS NAME, LOCATION AND DEPARTMENT
+
     @RequestMapping(value = "/team/add", method = RequestMethod.POST)
-    public ResponseEntity<List<Team>> addTeam(@RequestBody MyRequestObj myRequestObj) {
-        List<Team> teamList = companyService.addTeam(myRequestObj.getDepartment(), myRequestObj.getLocation(), myRequestObj.getTeam());
+    public ResponseEntity<List<Team>> addTeam(@RequestBody HierarchyDetails hierarchyDetails) {
+        List<Team> teamList = companyService.addTeam(hierarchyDetails.getDepartment(), hierarchyDetails.getLocation(), hierarchyDetails.getTeam());
         if (teamList != null) {
             return new ResponseEntity<>(teamList, HttpStatus.OK);
         } else {
@@ -135,23 +135,23 @@ public class MyController {
         }
     }
 
-    //REMOVE TEAM BY GIVING ITS NAME, LOCATION AND DEPARTMENT
+
     @RequestMapping(value = "/team/remove", method = RequestMethod.DELETE)
-    public ResponseEntity<List<Team>> removeTeam(@RequestBody MyRequestObj myRequestObj) {
+    public ResponseEntity<List<Team>> removeTeam(@RequestBody HierarchyDetails hierarchyDetails) {
         List<Team> listOfTeams = companyService.getAllTeams();
-        List<Team> teamList = companyService.deleteTeam(myRequestObj.getDepartment(), myRequestObj.getLocation(), myRequestObj.getTeam());
+        List<Team> teamList = companyService.deleteTeam(hierarchyDetails.getDepartment(), hierarchyDetails.getLocation(), hierarchyDetails.getTeam());
         if (teamList != null) {
-            if (cooperationService.removeConnection(myRequestObj.getTeam(), listOfTeams)) {
+            if (cooperationService.removeConnection(hierarchyDetails.getTeam(), listOfTeams)) {
                 return new ResponseEntity<>(teamList, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    //ADD LOCATION BY GIVING ITS NAME AND DEPARTMENT
+
     @RequestMapping(value = "/location/add", method = RequestMethod.POST)
-    public ResponseEntity<List<Location>> addLocation(@RequestBody MyRequestObj myRequestObj) {
-        List<Location> locations = companyService.addLocation(myRequestObj.getDepartment(), myRequestObj.getLocation());
+    public ResponseEntity<List<Location>> addLocation(@RequestBody HierarchyDetails hierarchyDetails) {
+        List<Location> locations = companyService.addLocation(hierarchyDetails.getDepartment(), hierarchyDetails.getLocation());
         if (locations != null) {
             return new ResponseEntity<>(locations, HttpStatus.OK);
         } else {
@@ -162,8 +162,8 @@ public class MyController {
 
     //REMOVE LOCATION BY GIVING ITS NAME AND DEPARTMENT
     @RequestMapping(value = "/location/remove", method = RequestMethod.DELETE)
-    public ResponseEntity<List<Location>> removeLocation(@RequestBody MyRequestObj myRequestObj) {
-        List<Location> locations = companyService.deleteLocation(myRequestObj.getDepartment(), myRequestObj.getLocation());
+    public ResponseEntity<List<Location>> removeLocation(@RequestBody HierarchyDetails hierarchyDetails) {
+        List<Location> locations = companyService.deleteLocation(hierarchyDetails.getDepartment(), hierarchyDetails.getLocation());
         if (locations != null) {
             return new ResponseEntity<>(locations, HttpStatus.OK);
         } else {
@@ -195,8 +195,8 @@ public class MyController {
 
     //ADD DEPARTMENT BY GIVING ITS NAME
     @RequestMapping(value = "/department/add", method = RequestMethod.POST)
-    public ResponseEntity<List<Department>> addDepartment(@RequestBody MyRequestObj myRequestObj) {
-        List<Department> departments = companyService.addDepartment(myRequestObj.getDepartment());
+    public ResponseEntity<List<Department>> addDepartment(@RequestBody HierarchyDetails hierarchyDetails) {
+        List<Department> departments = companyService.addDepartment(hierarchyDetails.getDepartment());
         if (departments != null) {
             return new ResponseEntity<>(departments, HttpStatus.OK);
         } else {
@@ -208,8 +208,8 @@ public class MyController {
     //REMOVE DEPARTMENT BY GIVING ITS NAME
     //TODO @RequestMapping(value = "/department/remove", method = Request.DELETE) --- should remove deparmtent by its name
     @RequestMapping(value = "/department/remove", method = RequestMethod.DELETE)
-    public ResponseEntity<List<Department>> removeDepartment(@RequestBody MyRequestObj myRequestObj) {
-        List<Department> departments = companyService.deleteDepartment(myRequestObj.getDepartment());
+    public ResponseEntity<List<Department>> removeDepartment(@RequestBody HierarchyDetails hierarchyDetails) {
+        List<Department> departments = companyService.deleteDepartment(hierarchyDetails.getDepartment());
         if (departments != null) {
             return new ResponseEntity<>(departments, HttpStatus.OK);
         } else {

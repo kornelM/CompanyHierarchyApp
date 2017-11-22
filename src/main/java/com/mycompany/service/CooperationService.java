@@ -1,6 +1,6 @@
 package com.mycompany.service;
 
-import com.mycompany.container.pojos.Team;
+import com.mycompany.hierarchyObjects.Team;
 import com.mycompany.service.interfaces.ICooperationService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;

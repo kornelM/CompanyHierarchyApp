@@ -1,4 +1,4 @@
-package com.mycompany.container.pojos;
+package com.mycompany.hierarchyObjects;
 
 import java.util.List;
 

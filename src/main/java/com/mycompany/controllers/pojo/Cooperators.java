@@ -1,12 +1,12 @@
-package com.mycompany.controllers.request_objects;
+package com.mycompany.controllers.pojo;
 
-public class CooperationRequest {
+public class Cooperators {
     private int parentId;
     private Integer[] coworkersIds;
 
-    public CooperationRequest (){}
+    public Cooperators(){}
 
-    public CooperationRequest(int parentId, Integer[] coworkersIds) {
+    public Cooperators(int parentId, Integer[] coworkersIds) {
         this.parentId = parentId;
         this.coworkersIds = coworkersIds;
     }

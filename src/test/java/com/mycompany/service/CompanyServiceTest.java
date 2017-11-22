@@ -1,14 +1,16 @@
 package com.mycompany.service;
 
-import com.mycompany.container.pojos.Department;
-import com.mycompany.container.pojos.Location;
-import com.mycompany.container.pojos.Team;
-import com.mycompany.container.pojos.TeamInfoResponse;
+import com.mycompany.hierarchyObjects.Department;
+import com.mycompany.hierarchyObjects.Location;
+import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.controllers.pojo.TeamDetails;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.*;
+
+
 
 public class CompanyServiceTest {
 
@@ -45,12 +47,12 @@ public class CompanyServiceTest {
         Integer coworkers[] = {4, 7};
         companyService.buildCompanyHierarchy(initHierarchy());
         cooperationService.setCoworkers(parentId, coworkers, companyService.getAllTeams());
-        Map<String, TeamInfoResponse> expectedMap = new HashMap<>();
-        expectedMap.put("Team4", new TeamInfoResponse("IT", "Szczecin"));
-        expectedMap.put("Team7", new TeamInfoResponse("HR", "Krakow"));
+        Map<String, TeamDetails> expectedMap = new HashMap<>();
+        expectedMap.put("Team4", new TeamDetails("IT", "Szczecin"));
+        expectedMap.put("Team7", new TeamDetails("HR", "Krakow"));
 
         //WHEN
-        Map<String, TeamInfoResponse> returnedMap = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
+        Map<String, TeamDetails> returnedMap = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
 
         //THEN
         Assert.assertEquals(expectedMap, returnedMap);
@@ -63,7 +65,7 @@ public class CompanyServiceTest {
         companyService.buildCompanyHierarchy(initHierarchy());
 
         //WHEN
-        Map<String, TeamInfoResponse> returnedMap = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
+        Map<String, TeamDetails> returnedMap = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
 
         //THEN
         Assert.assertEquals(null, returnedMap);
@@ -73,12 +75,12 @@ public class CompanyServiceTest {
     public void testGetTeamInfo() {
         //GIVEN
         String teamName = "Team5";
-        TeamInfoResponse expectedInfo = new TeamInfoResponse("IT", "Szczecin");
+        TeamDetails expectedInfo = new TeamDetails("IT", "Szczecin");
 
         companyService.buildCompanyHierarchy(initHierarchy());
 
         //WHEN
-        TeamInfoResponse returnedInfo = companyService.getTeamInfo(teamName);
+        TeamDetails returnedInfo = companyService.getTeamInfo(teamName);
 
         //THEN
         Assert.assertEquals(expectedInfo, returnedInfo);

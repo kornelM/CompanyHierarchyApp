@@ -1,10 +1,11 @@
-package com.mycompany.container.pojos;
+package com.mycompany.controllers.pojo;
 
-public class TeamInfoResponse {
+public class TeamDetails {
     private String department;
     private String location;
 
-    public TeamInfoResponse(String department, String location) {
+
+    public TeamDetails(String department, String location) {
         this.department = department;
         this.location = location;
     }
@@ -28,9 +29,9 @@ public class TeamInfoResponse {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof TeamInfoResponse)) return false;
+        if (!(o instanceof TeamDetails)) return false;
 
-        TeamInfoResponse that = (TeamInfoResponse) o;
+        TeamDetails that = (TeamDetails) o;
 
         if (!getDepartment().equals(that.getDepartment())) return false;
         return getLocation().equals(that.getLocation());

@@ -1,9 +1,9 @@
 package com.mycompany.service;
 
-import com.mycompany.container.pojos.Department;
-import com.mycompany.container.pojos.Location;
-import com.mycompany.container.pojos.Team;
-import com.mycompany.container.pojos.TeamInfoResponse;
+import com.mycompany.hierarchyObjects.Department;
+import com.mycompany.hierarchyObjects.Location;
+import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.controllers.pojo.TeamDetails;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -141,15 +141,15 @@ public class CooperationServiceTest {
         companyService.buildCompanyHierarchy(initHierarchy());
         cooperationService.setCoworkers(parentId, coworkers, companyService.getAllTeams());
 
-        Map<String, TeamInfoResponse> expectedMap = new HashMap<>();
-        expectedMap.put("Team4", new TeamInfoResponse("Marketing", "Krakow"));
-        expectedMap.put("Team8", new TeamInfoResponse("IT", "Szczecin"));
-        expectedMap.put("Team10", new TeamInfoResponse("IT", "Warszawa"));
-        expectedMap.put("Team15", new TeamInfoResponse("HR", "Krakow"));
-        expectedMap.put("Team18", new TeamInfoResponse("HR", "Poznan"));
+        Map<String, TeamDetails> expectedMap = new HashMap<>();
+        expectedMap.put("Team4", new TeamDetails("Marketing", "Krakow"));
+        expectedMap.put("Team8", new TeamDetails("IT", "Szczecin"));
+        expectedMap.put("Team10", new TeamDetails("IT", "Warszawa"));
+        expectedMap.put("Team15", new TeamDetails("HR", "Krakow"));
+        expectedMap.put("Team18", new TeamDetails("HR", "Poznan"));
 
         //WHEN
-        Map<String, TeamInfoResponse> returnedMap
+        Map<String, TeamDetails> returnedMap
                 = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
 
 
@@ -161,15 +161,15 @@ public class CooperationServiceTest {
     public void testGetTeamInfo() {
         //GIVEN
         companyService.buildCompanyHierarchy(initHierarchy());
-        TeamInfoResponse expected1 = new TeamInfoResponse("Marketing", "Krakow");
-        TeamInfoResponse expected2 = new TeamInfoResponse("IT", "Warszawa");
-        TeamInfoResponse expected3 = new TeamInfoResponse("HR", "Poznan");
+        TeamDetails expected1 = new TeamDetails("Marketing", "Krakow");
+        TeamDetails expected2 = new TeamDetails("IT", "Warszawa");
+        TeamDetails expected3 = new TeamDetails("HR", "Poznan");
 
 
         //WHEN
-        TeamInfoResponse returnedInfo1 = companyService.getTeamInfo("Team0");
-        TeamInfoResponse returnedInfo2 = companyService.getTeamInfo("Team10");
-        TeamInfoResponse returnedInfo3 = companyService.getTeamInfo("Team18");
+        TeamDetails returnedInfo1 = companyService.getTeamInfo("Team0");
+        TeamDetails returnedInfo2 = companyService.getTeamInfo("Team10");
+        TeamDetails returnedInfo3 = companyService.getTeamInfo("Team18");
 
         //THEN
         Assert.assertEquals(expected1, returnedInfo1);

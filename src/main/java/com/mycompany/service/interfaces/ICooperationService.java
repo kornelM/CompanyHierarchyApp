@@ -1,6 +1,6 @@
 package com.mycompany.service.interfaces;
 
-import com.mycompany.container.pojos.Team;
+import com.mycompany.hierarchyObjects.Team;
 
 import java.util.List;
 import java.util.Map;

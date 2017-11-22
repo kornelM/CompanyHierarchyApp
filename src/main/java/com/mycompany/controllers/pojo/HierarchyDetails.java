@@ -1,13 +1,13 @@
-package com.mycompany.controllers.request_objects;
+package com.mycompany.controllers.pojo;
 
-public class MyRequestObj {
+public class HierarchyDetails {
     private String department;
     private String location;
     private String team;
 
-    public MyRequestObj(){}
+    public HierarchyDetails(){}
 
-    public MyRequestObj(String department, String location, String team) {
+    public HierarchyDetails(String department, String location, String team) {
         this.department = department;
         this.location = location;
         this.team = team;

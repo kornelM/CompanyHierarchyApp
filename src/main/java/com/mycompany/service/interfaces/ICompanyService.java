@@ -1,9 +1,9 @@
 package com.mycompany.service.interfaces;
 
-import com.mycompany.container.pojos.Department;
-import com.mycompany.container.pojos.Location;
-import com.mycompany.container.pojos.Team;
-import com.mycompany.container.pojos.TeamInfoResponse;
+import com.mycompany.hierarchyObjects.Department;
+import com.mycompany.hierarchyObjects.Location;
+import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.controllers.pojo.TeamDetails;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -21,11 +21,11 @@ public interface ICompanyService {
 
     List<Team> addTeam(String departmentName, String locationName, String teamName);
 
-    TeamInfoResponse getTeamInfo(String teamName);
+    TeamDetails getTeamInfo(String teamName);
 
     List<Team> getAllTeams();
 
-    Map<String, TeamInfoResponse> getAllTeamCoworkersInfo(List<Team> teamsCo);
+    Map<String, TeamDetails> getAllTeamCoworkersInfo(List<Team> teamsCo);
 
     List<Department> deleteDepartment(String name);
 
