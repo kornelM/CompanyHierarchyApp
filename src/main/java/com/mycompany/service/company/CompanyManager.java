@@ -1,18 +1,19 @@
 package com.mycompany.service.company;
 
-import com.mycompany.service.*;
-import com.mycompany.service.details.HierarchyDetails;
-import com.mycompany.service.details.TeamDetails;
-import com.mycompany.service.validation.TypeValidator;
 import com.mycompany.exceptions.TypeNotFoundException;
 import com.mycompany.hierarchyObjects.Department;
 import com.mycompany.hierarchyObjects.Location;
 import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.service.DepartmentManager;
+import com.mycompany.service.LocationManager;
+import com.mycompany.service.TeamManager;
+import com.mycompany.service.details.HierarchyDetails;
+import com.mycompany.service.details.TeamDetails;
 import com.mycompany.service.interfaces.CompanyObject;
 import com.mycompany.service.interfaces.ObjectManager;
+import com.mycompany.service.validation.TypeValidator;
 import org.apache.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -23,11 +24,13 @@ import java.util.stream.Collectors;
 public class CompanyManager {
     private List<Department> departments;
 
+
     private TypeValidator typeValidator;
     private Map<String, ObjectManager> managerMap;
     private final Logger logger = Logger.getLogger(CompanyManager.class);
 
 
+    @Autowired
     public CompanyManager() {
         initMap();
         this.typeValidator = new TypeValidator();

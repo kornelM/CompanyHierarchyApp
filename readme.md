@@ -24,34 +24,44 @@ mvn test
 ### REST API
 
 ```
-/company/hierarchy...
  
-GET  /create   --- create a tree
-DELETE  /delete   --- delete a structure
+POST  /company/create   --- create a tree (JSON as a request body)
+DELETE  company/delete   --- delete a structure
  
-POST  /coworker/add   --- add a coworker to the teamName (return a map with the connections)
+POST  company/hierarchy/add   --- add a object to the tree
+              @RequestParam("type") decides what type of the object you add
+              @RequestBody HierarchyDetails specify where to create object
+              
+DELETE company/hierarchy/remove   --- remove object from the tree   
+              @RequestParam("type") decides what type of the object you remove
+              @RequestBody HierarchyDetails specify from where you remove object
+ 
+GET /company/hierarchy/get   --- get specific object from the tree
+              @RequestParam("type") decides what kind of object will be returned
+              @RequestParam department/location/team specify from where object should be returned
+              
+GET /company/hierarchy/get/all   --- get list of object names from selected tree level (by type)
+              @RequestParam("type") decides which object's names will be returned
+ 
+ 
+ 
+***** COWORKERS  *****
+
+ 
+POST /coworker/add   --- add coworker to the team (return a map with the connections)
+ 
 DELETE  /coworker/remove/{name}   --- remove a coworker by its name
+ 
 GET  /coworker/get/all   --- return a map of the connected teams
  
-GET  /teamName/get/coworker/{name}   --- return coworkers of the teamName by its name
-GET  get/info/teamName/{name}   --- return departmentName and locationName names of given teamName
-GET  /teamName/get/all   --- return all teams in the company
-POST  /teamName/add   --- add a teamName (using MyRequestObj class)
-DELETE  /teamName/remove   --- remove a teamName from the hierarchy
- 
-GET  /locationName/get/all   --- return all the locations in the company
-POST  /locationName/add   --- add a locationName (using MyRequestObj class)
-DELETE  /locationName/remove   --- remove a locationName from the hierarchy
- 
-GET  /departmentName/get/all   --- return all the departments
-POST  /departmentName/add   --- add a departmentName (using MyRequestObj class)
-DELETE  /departmentName/remove   --- remove a departmentName from the hierarchy
+GET  /team/get/coworker/{name}   --- return coworkers of the team by its name
 ```
 
 ### Design overview
-Application is based on two classes - **CompanyService** and **CooperationService** which manage
-creating and deleting teams, locations, departments and connections between teams
-
+Application is based on the CompanyManager which manages of the company structure.
+There are department/location/team managers which implements ObjectManager interface. 
+Such composition allows CompanyManager to switch between those managers depending on the sent object's type.
+All information needed to create/remove or get object from hierarchy are providing by HierarchyDetails class.
 
 
 #### Some examples of requests:
@@ -230,15 +240,7 @@ creating and deleting teams, locations, departments and connections between team
 
 ```
 
-##### removing a teamName from hierarchy (teamName will be also removed from any connections)
 
-```
-{
-    "departmentName": "IT",
-    "locationName": "Krakow",
-    "teamName": "teamITK6" 
-}
-```
 ###### returns list of teams in a given locationName:
 ```
 [
@@ -254,23 +256,74 @@ creating and deleting teams, locations, departments and connections between team
 ```
 
 
+###### returns list of department names:
+http://localhost:8080/company/hierarchy/get/all?type=department
+```
+[
+    "marketing",
+    "IT",
+    "HR",
+    "Customer Service"
+]
+```
+
+###### add department to the tree:
+http://localhost:8080/company/hierarchy/add?type=department
+```
+{
+    "departmentName": "newDepartment"
+}
+```
+
+
+###### add location to the tree (to newDepartment):
+http://localhost:8080/company/hierarchy/get/all?type=location
+```
+{
+    "departmentName": "newDepartment",
+    "locationName": "newLocation"
+}
+```
+
+###### add team to the tree (to newLocation in newDepartment):
+http://localhost:8080/company/hierarchy/get/all?type=team
+```
+{
+    "departmentName": "newDepartment",
+    "locationName": "newLocation",
+    "teamName": "newTeam"
+}
+```
+
+
+###### remove team to the tree (from newLocation in newDepartment):
+http://localhost:8080/company/hierarchy/remove?type=team
+```
+{
+    "departmentName": "newDepartment",
+    "locationName": "newLocation",
+    "teamName": "newTeam"
+}
+```
+
+
 
 ### TESTS
 
 Tests cover logic of classes:
-- CompanyServiceTest
+- CompanyManager
 - CooperationService
+- DepartmentManager
+- LocationManager
+- TeamManager
 
+ 
+  
 
 ### Possible improvements  
-Teams can be identified by its name or id. It could be changed to identify teamName only by its name/id.
-
-- migrate Spring configuration to .xml file (for now annotations are fine and don't create chaos)
-- refactor methods to increase Java 8 usage (i.e. Optionals?)
-- more unit, integration tests
-- mapping endpoints
+- I have to learn writing acceptance tests and test API to complete this app.
 
 ###### Note
-In the beginning I started to write app which was connected with database but then I read that application should keep all information about hierarchy tree.
-I think I would create app with database because it's more natural for me.
-Hope this solution will meets requirements :)
+I changed a structure of the application. Now CompanyManager dynamically switches between object's managers.
+I divide one huge controller for the smaller controllers.
+Main defect is that app doesn't have acceptance test.I have to learn how to write them.

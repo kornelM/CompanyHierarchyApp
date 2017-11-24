@@ -56,12 +56,10 @@ public class DepartmentManager implements ObjectManager, ListCrawler {
         Optional<List<Department>> departments = getObjectsList(dep, hd);
 
         if (isDepartmentPresent(departments, hd.getDepartmentName())) {
-            List<Department> departmentList = departments.get();
-            for (Department d : departmentList) {
-                if (d.getName().equals(hd.getDepartmentName())) {
-                    return d;
-                }
-            }
+            return departments.get().stream()
+                    .filter(department -> department.getName().equals(hd.getDepartmentName()))
+                    .findFirst()
+                    .orElse(null);
         }
         return null;
     }

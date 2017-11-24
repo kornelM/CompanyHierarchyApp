@@ -106,10 +106,8 @@ public class CooperationServiceTest {
         teamsToAdd.addAll(Arrays.asList(new Team(1, "Team1"),
                 new Team(2, "Team2"), new Team(4, "Team4")));
 
-
         //WHEN
         List<Team> returnedTeams = cooperationService.checkTeamList(teamsToAdd, listOfAvailableTeam);
-
 
         //THEN
         Assert.assertEquals(expectedTeamList, returnedTeams);
@@ -122,14 +120,10 @@ public class CooperationServiceTest {
         String teamName = "Team2";
         Integer coworkers[] = {2, 3};
         List<Team> teams = Arrays.asList(new Team(1, "Team1"), new Team(2, "Team2"), new Team(3, "Team3"));
-
         cooperationService.setCoworkers(1, coworkers, teams);
 
-        //WHEN
-        boolean result = cooperationService.removeConnection(teamName, teams);
-
         //THEN
-        Assert.assertTrue(result);
+        Assert.assertTrue(cooperationService.removeConnection(teamName, teams));
     }
 
 

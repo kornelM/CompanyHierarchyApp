@@ -31,15 +31,16 @@ public class CooperationService {
             logger.error("Team: " + teamName + " not found.");
             return false;
         }
-
-        List<Team> teamCoworkers = teamCo.get(teamName);
-
-        teamCoworkers
-                .forEach(team -> teamCo.get(team.getName()).remove(teamToRemove));
-
+        removeTeamFromCooperatorsList(teamToRemove, teamName);
         sizeAfter = teamCo.remove(teamToRemove.getName()).size();
 
         return sizeAfter < sizeBefore;
+    }
+
+    private List<Team> removeTeamFromCooperatorsList(Team teamToRemove, String teamName){
+        List<Team> teamCoworkers = teamCo.get(teamName);
+        teamCoworkers.forEach(team -> teamCo.get(team.getName()).remove(teamToRemove));
+        return teamCoworkers;
     }
 
 

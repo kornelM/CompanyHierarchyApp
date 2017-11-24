@@ -3,6 +3,7 @@ package com.mycompany.controllers;
 
 import com.mycompany.hierarchyObjects.Department;
 import com.mycompany.hierarchyObjects.Team;
+import com.mycompany.service.company.CooperationService;
 import com.mycompany.service.details.HierarchyDetails;
 import com.mycompany.service.company.CompanyManager;
 import com.mycompany.exceptions.TypeNotFoundException;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(value = "/company/hierarchy")
 public class HierarchyController {
-
+    private CooperationService cooperationService;
     private CompanyManager companyManager;
 
     @Autowired
@@ -46,6 +47,9 @@ public class HierarchyController {
                                          @RequestBody HierarchyDetails hd) {
         try {
             if (companyManager.remove(type, hd)) {
+                if(type.equals("team")){
+                    cooperationService.removeConnection(hd.getTeamName(), companyManager.getAllTeams().get());
+                }
                 return new ResponseEntity<>("Object removed!", HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Object not removed!", HttpStatus.CONFLICT);
