@@ -1,9 +1,11 @@
-package com.mycompany.service;
+package com.mycompany.service.unit;
 
+import com.mycompany.service.details.TeamDetails;
 import com.mycompany.hierarchyObjects.Department;
 import com.mycompany.hierarchyObjects.Location;
 import com.mycompany.hierarchyObjects.Team;
-import com.mycompany.controllers.pojo.TeamDetails;
+import com.mycompany.service.company.CompanyManager;
+import com.mycompany.service.company.CooperationService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,11 +15,11 @@ import java.util.*;
 
 public class CooperationServiceTest {
     private CooperationService cooperationService;
-    private CompanyService companyService;
+    private CompanyManager companyManager;
 
     @Before
     public void setUp() {
-        this.companyService = new CompanyService();
+        this.companyManager = new CompanyManager();
         this.cooperationService = new CooperationService();
     }
 
@@ -67,7 +69,7 @@ public class CooperationServiceTest {
     }
 
     @Test
-    public void testGetTeamByName(){
+    public void testGetTeamByName() {
         //GIVEN
         List<Team> teamList = Arrays.asList(new Team(1, "Team1"),
                 new Team(2, "Team2"), new Team(3, "Team3"),
@@ -78,12 +80,11 @@ public class CooperationServiceTest {
 
 
         //WHEN
-        Team returnedTeam = cooperationService.getTeamByName(teamName,teamList);
+        Team returnedTeam = cooperationService.getTeamByName(teamName, teamList);
 
 
         //THEN
         Assert.assertEquals(expectedTeam, returnedTeam);
-
 
 
     }
@@ -138,8 +139,8 @@ public class CooperationServiceTest {
         String teamName = "Team2";
         int parentId = 4;
         Integer coworkers[] = {2, 8, 10, 15, 18};
-        companyService.buildCompanyHierarchy(initHierarchy());
-        cooperationService.setCoworkers(parentId, coworkers, companyService.getAllTeams());
+        companyManager.createDepartments(initHierarchy());
+        cooperationService.setCoworkers(parentId, coworkers, companyManager.getAllTeams().get());
 
         Map<String, TeamDetails> expectedMap = new HashMap<>();
         expectedMap.put("Team4", new TeamDetails("Marketing", "Krakow"));
@@ -150,7 +151,7 @@ public class CooperationServiceTest {
 
         //WHEN
         Map<String, TeamDetails> returnedMap
-                = companyService.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
+                = companyManager.getAllTeamCoworkersInfo(cooperationService.getTeamCo().get(teamName));
 
 
         //THEN
@@ -160,58 +161,21 @@ public class CooperationServiceTest {
     @Test
     public void testGetTeamInfo() {
         //GIVEN
-        companyService.buildCompanyHierarchy(initHierarchy());
+        companyManager.createDepartments(initHierarchy());
         TeamDetails expected1 = new TeamDetails("Marketing", "Krakow");
         TeamDetails expected2 = new TeamDetails("IT", "Warszawa");
         TeamDetails expected3 = new TeamDetails("HR", "Poznan");
 
 
         //WHEN
-        TeamDetails returnedInfo1 = companyService.getTeamInfo("Team0");
-        TeamDetails returnedInfo2 = companyService.getTeamInfo("Team10");
-        TeamDetails returnedInfo3 = companyService.getTeamInfo("Team18");
+        TeamDetails returnedInfo1 = companyManager.getTeamInfo("Team0");
+        TeamDetails returnedInfo2 = companyManager.getTeamInfo("Team10");
+        TeamDetails returnedInfo3 = companyManager.getTeamInfo("Team18");
 
         //THEN
         Assert.assertEquals(expected1, returnedInfo1);
         Assert.assertEquals(expected2, returnedInfo2);
         Assert.assertEquals(expected3, returnedInfo3);
-    }
-
-    @Test
-    public void testRemoveIncorrectIds() {
-        //GIVEN
-        companyService.buildCompanyHierarchy(initHierarchy());
-        Integer[] intTable = {1,2,3,100};
-        List<Integer> expectedTable = Arrays.asList(1,2,3);
-        List<Team> teamList = Arrays.asList(new Team(1, "Team1"),
-                new Team(2, "Team2"), new Team(3, "Team3"));
-
-        //WHEN
-        List<Integer> returnedTable = cooperationService.removeIncorrectIds(intTable, teamList);
-
-        //THEN
-        Assert.assertEquals(expectedTable, returnedTable);
-    }
-
-
-    @Test
-    public void testCheckListIfIdPresent(){
-        //GIVEN
-        companyService.buildCompanyHierarchy(initHierarchy());
-        int teamId1 = 1;
-        int teamId2 = 100;
-        List<Team> teamList = Arrays.asList(new Team(1, "Team1"),
-                new Team(2, "Team2"), new Team(3, "Team3"));
-
-        //WHEN
-        boolean result1 = cooperationService.checkListIfIdPresent(teamList, teamId1);
-        boolean result2 = cooperationService.checkListIfIdPresent(teamList, teamId2);
-
-        //THEN
-        Assert.assertTrue(result1);
-        Assert.assertFalse(result2);
-
-
     }
 
     private List<Department> initHierarchy() {

@@ -1,6 +1,8 @@
 package com.mycompany.hierarchyObjects;
 
-public class Team {
+import com.mycompany.service.interfaces.CompanyObject;
+
+public class Team implements CompanyObject{
     private static int idNumber;
 
     private int id;

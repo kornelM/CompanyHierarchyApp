@@ -1,4 +1,4 @@
-package com.mycompany.controllers.pojo;
+package com.mycompany.hierarchyObjects;
 
 public class Cooperators {
     private int parentId;

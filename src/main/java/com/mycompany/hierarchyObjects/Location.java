@@ -1,8 +1,10 @@
 package com.mycompany.hierarchyObjects;
 
+import com.mycompany.service.interfaces.CompanyObject;
+
 import java.util.List;
 
-public class Location {
+public class Location implements CompanyObject{
     private String name;
     private List<Team> teams;
 

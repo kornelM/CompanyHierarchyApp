@@ -1,9 +1,11 @@
-package com.mycompany.controllers.pojo;
+package com.mycompany.service.details;
 
 public class TeamDetails {
     private String department;
     private String location;
 
+    public TeamDetails() {
+    }
 
     public TeamDetails(String department, String location) {
         this.department = department;

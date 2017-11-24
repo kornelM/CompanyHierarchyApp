@@ -1,7 +1,6 @@
-package com.mycompany.service;
+package com.mycompany.service.company;
 
 import com.mycompany.hierarchyObjects.Team;
-import com.mycompany.service.interfaces.ICooperationService;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +9,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class CooperationService implements ICooperationService {
+public class CooperationService {
     private Map<String, List<Team>> teamCo;
     private final Logger logger = Logger.getLogger(CooperationService.class);
 
@@ -23,7 +22,6 @@ public class CooperationService implements ICooperationService {
     }
 
 
-    @Override
     public boolean removeConnection(String teamName, List<Team> teams) {
         int sizeBefore = teamCo.size();
         int sizeAfter;
@@ -40,22 +38,23 @@ public class CooperationService implements ICooperationService {
                 .forEach(team -> teamCo.get(team.getName()).remove(teamToRemove));
 
         sizeAfter = teamCo.remove(teamToRemove.getName()).size();
-        logger.info("Size before: " + sizeBefore + ", sizeAfter: " + sizeAfter);
 
         return sizeAfter < sizeBefore;
     }
 
 
-    @Override
     public Map<String, List<Team>> setCoworkers(int idParent, Integer[] coworkersIds, List<Team> teams) {
-        List<Integer> availableTeamIds;
         if (checkListIfIdPresent(teams, idParent)) {
-            availableTeamIds = removeIncorrectIds(coworkersIds, teams);
-            availableTeamIds.add(idParent);
-            return setConnections(availableTeamIds, teams);
+            return setConnections(evaluateTeamId(idParent,coworkersIds,teams), teams);
         }
         logger.error("Team-parent with id: " + idParent + "does not exists!");
         return null;
+    }
+
+    private List<Integer> evaluateTeamId(int parentId, Integer[] coworkersIds, List<Team> teams) {
+        List<Integer> availableTeamIds = removeIncorrectIds(coworkersIds, teams);
+        availableTeamIds.add(parentId);
+        return availableTeamIds;
     }
 
 
@@ -76,28 +75,21 @@ public class CooperationService implements ICooperationService {
     }
 
 
-    @Override
     public List<Team> checkTeamList(List<Team> teamsToAdd, List<Team> existingList) {
         List<Team> returnList = new ArrayList<>();
 
         if (existingList != null) {
             teamsToAdd.removeIf(existingList::contains);
             returnList.addAll(existingList);
-        }else {
-            logger.error("List of coworkers empty!");
         }
         returnList.addAll(teamsToAdd);
         return returnList;
     }
 
-
-    @Override
     public boolean checkListIfIdPresent(List<Team> teamList, int id) {
         return teamList.stream().anyMatch(team -> id == team.getId());
     }
 
-
-    @Override
     public List<Integer> removeIncorrectIds(Integer[] intTable, List<Team> teamList) {
         List<Integer> teamIds = teamList.stream()
                 .map(Team::getId)
@@ -108,8 +100,6 @@ public class CooperationService implements ICooperationService {
                 .collect(Collectors.toList());
     }
 
-
-    @Override
     public Team getTeamFromList(int teamId, List<Team> teamList) {
         return teamList.stream()
                 .filter(team -> team.getId() == teamId)
@@ -118,7 +108,6 @@ public class CooperationService implements ICooperationService {
     }
 
 
-    @Override
     public Team getTeamByName(String teamName, List<Team> teamList) {
         return teamList.stream()
                 .filter(team -> team.getName().equals(teamName))

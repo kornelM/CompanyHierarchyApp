@@ -29,23 +29,23 @@ mvn test
 GET  /create   --- create a tree
 DELETE  /delete   --- delete a structure
  
-POST  /coworker/add   --- add a coworker to the team (return a map with the connections)
+POST  /coworker/add   --- add a coworker to the teamName (return a map with the connections)
 DELETE  /coworker/remove/{name}   --- remove a coworker by its name
 GET  /coworker/get/all   --- return a map of the connected teams
  
-GET  /team/get/coworker/{name}   --- return coworkers of the team by its name
-GET  get/info/team/{name}   --- return department and location names of given team
-GET  /team/get/all   --- return all teams in the company
-POST  /team/add   --- add a team (using MyRequestObj class)
-DELETE  /team/remove   --- remove a team from the hierarchy
+GET  /teamName/get/coworker/{name}   --- return coworkers of the teamName by its name
+GET  get/info/teamName/{name}   --- return departmentName and locationName names of given teamName
+GET  /teamName/get/all   --- return all teams in the company
+POST  /teamName/add   --- add a teamName (using MyRequestObj class)
+DELETE  /teamName/remove   --- remove a teamName from the hierarchy
  
-GET  /location/get/all   --- return all the locations in the company
-POST  /location/add   --- add a location (using MyRequestObj class)
-DELETE  /location/remove   --- remove a location from the hierarchy
+GET  /locationName/get/all   --- return all the locations in the company
+POST  /locationName/add   --- add a locationName (using MyRequestObj class)
+DELETE  /locationName/remove   --- remove a locationName from the hierarchy
  
-GET  /department/get/all   --- return all the departments
-POST  /department/add   --- add a department (using MyRequestObj class)
-DELETE  /department/remove   --- remove a department from the hierarchy
+GET  /departmentName/get/all   --- return all the departments
+POST  /departmentName/add   --- add a departmentName (using MyRequestObj class)
+DELETE  /departmentName/remove   --- remove a departmentName from the hierarchy
 ```
 
 ### Design overview
@@ -230,16 +230,16 @@ creating and deleting teams, locations, departments and connections between team
 
 ```
 
-##### removing a team from hierarchy (team will be also removed from any connections)
+##### removing a teamName from hierarchy (teamName will be also removed from any connections)
 
 ```
 {
-    "department": "IT",
-    "location": "Krakow",
-    "team": "teamITK6" 
+    "departmentName": "IT",
+    "locationName": "Krakow",
+    "teamName": "teamITK6" 
 }
 ```
-###### returns list of teams in a given location:
+###### returns list of teams in a given locationName:
 ```
 [
     {
@@ -263,7 +263,7 @@ Tests cover logic of classes:
 
 
 ### Possible improvements  
-Teams can be identified by its name or id. It could be changed to identify team only by its name/id.
+Teams can be identified by its name or id. It could be changed to identify teamName only by its name/id.
 
 - migrate Spring configuration to .xml file (for now annotations are fine and don't create chaos)
 - refactor methods to increase Java 8 usage (i.e. Optionals?)

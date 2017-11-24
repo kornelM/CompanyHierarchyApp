@@ -1,8 +1,10 @@
 package com.mycompany.hierarchyObjects;
 
+import com.mycompany.service.interfaces.CompanyObject;
+
 import java.util.List;
 
-public class Department {
+public class Department implements CompanyObject{
 
 
     private String name;
