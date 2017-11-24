@@ -1,7 +1,6 @@
 package com.mycompany.controllers;
 
 
-import com.mycompany.hierarchyObjects.Company;
 import com.mycompany.hierarchyObjects.Cooperators;
 import com.mycompany.hierarchyObjects.Team;
 import com.mycompany.service.company.CompanyManager;

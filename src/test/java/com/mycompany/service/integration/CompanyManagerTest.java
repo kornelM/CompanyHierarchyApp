@@ -254,7 +254,6 @@ public class CompanyManagerTest {
     }
 
 
-
     @Test
     public void testGetAllTeams() throws Exception {
         //GIVEN
@@ -268,8 +267,6 @@ public class CompanyManagerTest {
                 new Team(6, "Team6"),
                 new Team(7, "Team7"),
                 new Team(8, "Team8"));
-        companyManager.createDepartments(initDepartmentsForTests());
-
         //WHEN
         List<Team> returnedTeams = companyManager.getAllTeams().get();
 
@@ -284,24 +281,50 @@ public class CompanyManagerTest {
         String teamName = "Team5";
         TeamDetails expectedInfo = new TeamDetails("Marketing", "Warszawa");
 
-        companyManager.createDepartments(initDepartmentsForTests());
-
-        //WHEN
-        TeamDetails returnedInfo = companyManager.getTeamInfo(teamName);
-
         //THEN
-        Assert.assertEquals(expectedInfo, returnedInfo);
+        Assert.assertEquals(expectedInfo, companyManager.getTeamInfo(teamName));
     }
 
 
+    @Test
+    public void testDeleteCompanyHierarchy() throws Exception {
+        //THEN
+        Assert.assertTrue(companyManager.deleteCompanyHierarchy());
+    }
 
 
+    @Test
+    public void testGetCompanyObjNames_Teams() throws TypeNotFoundException {
+        //GIVEN
+        String type = "team";
+        List<String> expectedTeamNames = Arrays.asList("Team0", "Team1", "Team2",
+                "Team3", "Team4", "Team5", "Team6", "Team7", "Team8");
+
+        //THEN
+        Assert.assertEquals(expectedTeamNames, companyManager.getCompanyObjNames(type));
+    }
 
 
+    @Test
+    public void testGetCompanyObjNames_Locations() throws TypeNotFoundException {
+        //GIVEN
+        String type = "location";
+        List<String> expectedLocationNames = Arrays.asList("Krakow", "Warszawa", "Poznan");
+
+        //THEN
+        Assert.assertEquals(expectedLocationNames , companyManager.getCompanyObjNames(type));
+    }
 
 
+    @Test
+    public void testGetCompanyObjNames_Departments() throws TypeNotFoundException {
+        //GIVEN
+        String type = "department";
+        List<String> expectedDepartmentNames = Arrays.asList("Marketing", "IT");
 
-
+        //THEN
+        Assert.assertEquals(expectedDepartmentNames , companyManager.getCompanyObjNames(type));
+    }
 
 
 

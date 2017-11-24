@@ -11,6 +11,8 @@ import com.mycompany.hierarchyObjects.Team;
 import com.mycompany.service.interfaces.CompanyObject;
 import com.mycompany.service.interfaces.ObjectManager;
 import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -138,12 +140,15 @@ public class CompanyManager {
     }
 
 
-//    public Optional getAll(String type, HierarchyDetails hd) throws TypeNotFoundException {
-//        if (typeValidator.checkType(type)) {
-//            return managerMap.get(type.toLowerCase()).getAll(departments, hd);
-//        }
-//        throw new TypeNotFoundException("Type " + type + " not found");
-//    }
+    public boolean deleteCompanyHierarchy() {
+        if (departments != null) {
+            departments = null;
+            return true;
+        } else {
+            logger.error("Cannot remove tree");
+            return false;
+        }
+    }
 
 
     private void initMap() {
