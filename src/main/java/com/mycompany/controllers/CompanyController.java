@@ -41,7 +41,7 @@ public class CompanyController {
         }
     }
 
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/remove", method = RequestMethod.DELETE)
     public ResponseEntity deleteHierarchy() {
         if (companyManager.deleteCompanyHierarchy()) {
             Team.clearData();
